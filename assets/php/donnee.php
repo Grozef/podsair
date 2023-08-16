@@ -91,7 +91,7 @@ function connexion_user(){
         // On récupére l'utilisateurs 
             $nom = strip_tags($_POST["nom"]);
             $mdp = strip_tags($_POST["mdp"]);
-            
+            $remdp = strip_tags($_POST["remdp"]);
             //à utiliser pour comparer le mot de passe et la confirmation
            // $remdp = strip_tags($_POST["remdp"]);
             $sql=$db->prepare("SELECT nom,mdp FROM $nom_table WHERE nom=:nom LIMIT 1");
@@ -100,16 +100,20 @@ function connexion_user(){
             ]);
             $tab=$sql->fetchAll();
             //print_r($tab);
-        // On verifie dans un premier temps s'il y en y a un qui répond à l'authentification
-            if(count($tab)>0 && password_verify($mdp, $tab[0]["mdp"])){
-                echo "connexion réussie, bienvenu $nom";
-            }
-        // S'il y a un soucis alors il y a un message d'erreur qui sera intégré
-            else
-            {
-                echo "On ne se connait pas. Va t'en.";
-            }
+            //ajouter une condition pour vérifier la concordance entre les champs mdp et remdp
+            if($mdp == $remdp)
+                {        // On verifie s'il y en y a un qui répond à l'authentification
+                    if(count($tab)>0 && password_verify($mdp, $tab[0]["mdp"])){
+                        echo "connexion réussie, bienvenu $nom";
+                    }           
+                // S'il y a un soucis alors il y a un message d'erreur qui sera intégré
+                    else
+                    {
+                        echo "On ne se connait pas. Va t'en.";
+                    }
+                 } else {
+                        echo "le mot de passe et la confirmation ne correspondent pas.";
           }
+        }
 
 }
-//rajouter une condition pour vérifier la concordance entre les champs mdp et remdp
