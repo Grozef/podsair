@@ -7,16 +7,18 @@ function inser()
          // Ne sert a rien puisque le champs du formulaire possede l'attribut (required )
          // penser a remplacer !empty par des filtres de sécurité
 
+       // La requête d'insertion n'est exécutée que si les champs obligatoires ne sont pas vides  
         if (!empty($_GET["nom"]) && !empty($_GET["mail"])) {
             // Utilisation de la fonction pour se connecter à la bdd TrouverUnJobPourMoussa
                 $db = connexion_bdd();
                 $nom_table = "proteine";
                 $nom = strip_tags($_GET["nom"]);
+             // Si $descript est définie et non nulle (isset) ET n'est pas une chaine de characteres vide 
                 $descript = isset($_GET["messages"]) ? $_GET["messages"] : "";
                 $mail = strip_tags($_GET["mail"]);
 
-            // La requête d'insertion n'est exécutée que si les champs obligatoires ne sont pas vides
             // retirer tous les caracteres illegaux de l'email et valide l'email
+            // à refaire avec FILTER_VALIDATE_REGEXP
                     if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
                         echo("$mail is a valid email address <br>");
                 $sql = "INSERT INTO $nom_table (nom, mail, messages) VALUES (:nom, :mail, :messages)";           
