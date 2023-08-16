@@ -68,7 +68,7 @@ function inser_inscription(){
     // Si le nombre de retour est supérieur à 0 donc s'il y en a au moins 1 cela veut dire que l'utilisateur existe déja
         if(count($tab)>0){
             // echo "<script>alert(\"l'utilisateur existe déjà \")</script>";
-             echo "l'utilisateur existe déjà";
+             echo "l'utilisateur existe déjà, 🍕 <br>";
         }else{
             // Sinon insérer l'utilisateur / user  
                 $sql=$db->prepare("INSERT INTO $nom_table(nom,mdp) VALUES(:nom,:mdp)");
