@@ -12,19 +12,25 @@ function inser()
                 $db = connexion_bdd();
                 $nom_table = "proteine";
                 $nom = strip_tags($_GET["nom"]);
-                $mail = strip_tags($_GET["mail"]);
                 $descript = isset($_GET["messages"]) ? $_GET["messages"] : "";
+                $mail = strip_tags($_GET["mail"]);
 
             // La requête d'insertion n'est exécutée que si les champs obligatoires ne sont pas vides
-                $sql = "INSERT INTO $nom_table (nom, mail, messages) VALUES (:nom, :mail, :messages)";
-                        
+            // retirer tous les caracteres illegaux de l'email et valide l'email
+                    if (filter_var($mail, FILTER_VALIDATE_EMAIL)) {
+                        echo("$mail is a valid email address <br>");
+                $sql = "INSERT INTO $nom_table (nom, mail, messages) VALUES (:nom, :mail, :messages)";           
                 $stmt = $db->prepare($sql);
                 $stmt->bindParam(":nom", $nom);
                 $stmt->bindParam(":mail", $mail);
                 $stmt->bindParam(":messages", $descript);
                 $stmt->execute();
             // Message de confirmation
-                echo "Insertion réussie, 🍕";
+                echo "Insertion réussie, 🍕 <br>";
+
+                    } else {
+                        echo("$mail is not a valid email address <br>");
+                    }  
             // Utilisation de la fonction pour se déconnecter de la bdd
                 close_connexion($db);
            // var_dump($_GET);
@@ -112,6 +118,7 @@ function connexion_user(){
                         echo "On ne se connait pas. Va t'en.";
                     }
                  } else {
+                    // message d'erreur spécifique à la non correspondance entre le mdp et la confirmation
                         echo "le mot de passe et la confirmation ne correspondent pas.";
           }
         }
